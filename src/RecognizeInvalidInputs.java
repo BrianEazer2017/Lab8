@@ -26,7 +26,7 @@ public class RecognizeInvalidInputs {
 		int index = -1;
 		String name = "";
 		System.out.println("What student would you like to learn about? Here are their names. "
-				+ "You can access the student by number or name:");
+				+ "You can access the student by number or name and I'll tell you their favorite food and hometown:");
 		printStudentNames(studentNames);
 		try 
 		{
@@ -71,18 +71,34 @@ public class RecognizeInvalidInputs {
 		askToKeepGoing(name, index,favFood, hometown, studentNames);
 	}
 
-	private static void askToKeepGoing(String name, int index, String[] favFood, String[] hometown, String[] studentNames) {
+	public static void askToKeepGoing(String name, int index, String[] favFood, String[] hometown, String[] studentNames){
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Would you like to ask about another student?");
 		String answer = sc.nextLine();
+		
+		try {
+			answerCheck(name, index, favFood, hometown, studentNames, answer);
+		} catch(WrongInputException ex) {
+			System.out.println("Huh?" + ex);
+			askToKeepGoing(name, index, favFood, hometown, studentNames);
+		}
+		}
+
+	public static boolean answerCheck(String name, int index, String[] favFood, String[] hometown, String[] studentNames, String answer) 
+	throws WrongInputException
+	{
+		boolean keepGoing = false;
 		if (answer.matches("^[yY]+e*s*")) {
 			input(studentNames, favFood, hometown);
-		} else if (answer.matches("[nN][oO].*")) {
+			keepGoing = true;
+			return keepGoing;
+		} 
+		else if (answer.matches("^[nN][oO]*")) {
 			System.out.println("See you around kid");
+			return keepGoing;
 		}
 		else {
-			System.out.println("Huh?");
-			askToKeepGoing(name, index, favFood, hometown, studentNames);
+			throw new WrongInputException("You seem to not have entered yes or no buddy...");
 		}
 	}
 }
