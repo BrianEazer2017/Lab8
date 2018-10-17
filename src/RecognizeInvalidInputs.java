@@ -37,9 +37,15 @@ public class RecognizeInvalidInputs {
 			name = sc.nextLine();
 			index = getIndex(studentNames, name);
 			}
-		printStudentsInfo(name, index, favFood, hometown, studentNames); 
+		System.out.println("Would you like to know " + name + "'s hometown or favorite food?");
+		String answer = sc.nextLine();
+		if (answer.matches("^[hH]ometown")) {
+		printStudentsHometown(name, index, favFood, hometown, studentNames); 
+		} else if (answer.matches("favorite food")) {
+			printStudentsFavoriteFood(name, index, favFood, hometown, studentNames);
+		}
 		} catch (IndexOutOfBoundsException ex) {
-			System.out.println("Looks like you didn't enter a whole number in the range of 1-20. Try again");
+			System.out.println("Looks like you didn't enter a whole number in the range of 1-20. Try again. Or enter a name");
 			input(studentNames, favFood, hometown);
 		} catch(IllegalArgumentException ex) {
 			System.out.println("Try again");
@@ -66,11 +72,15 @@ public class RecognizeInvalidInputs {
 		return index;
 	}
 	
-	private static void printStudentsInfo(String name, int index, String[] favFood, String[] hometown, String[] studentNames) {
-		System.out.println(name + "'s favorite food is " + favFood[index] + " and he/she is from " + hometown[index] + ".");
+	private static void printStudentsHometown(String name, int index, String[] favFood, String[] hometown, String[] studentNames) {
+		System.out.println(name + " is from " + hometown[index] + ".");
 		askToKeepGoing(name, index,favFood, hometown, studentNames);
 	}
 
+	private static void printStudentsFavoriteFood(String name, int index, String[] favFood, String[] hometown, String[] studentNames) {
+		System.out.println(name + "'s favorite food is " + favFood[index] + ".");
+		askToKeepGoing(name, index,favFood, hometown, studentNames);
+	}
 	public static void askToKeepGoing(String name, int index, String[] favFood, String[] hometown, String[] studentNames){
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Would you like to ask about another student?");
