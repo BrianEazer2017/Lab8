@@ -41,8 +41,11 @@ public class RecognizeInvalidInputs {
 		String answer = sc.nextLine();
 		if (answer.matches("^[hH]ometown")) {
 		printStudentsHometown(name, index, favFood, hometown, studentNames); 
-		} else if (answer.matches("favorite food")) {
+		} else if (answer.matches("^[fF]avorite [fF]ood")) {
 			printStudentsFavoriteFood(name, index, favFood, hometown, studentNames);
+		} else {
+			System.out.println("Oh no let's try it from the beginning");
+			input(studentNames, favFood, hometown);
 		}
 		} catch (IndexOutOfBoundsException ex) {
 			System.out.println("Looks like you didn't enter a whole number in the range of 1-20. Try again. Or enter a name");
@@ -89,7 +92,7 @@ public class RecognizeInvalidInputs {
 		try {
 			answerCheck(name, index, favFood, hometown, studentNames, answer);
 		} catch(WrongInputException ex) {
-			System.out.println("Huh?" + ex);
+			System.out.println("Huh? " + ex);
 			askToKeepGoing(name, index, favFood, hometown, studentNames);
 		}
 		}
