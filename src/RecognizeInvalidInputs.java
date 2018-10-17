@@ -16,17 +16,35 @@ public class RecognizeInvalidInputs {
 				"just a lot of really smelly carrots"};
 		
 		String[] hometown = {"San Diego", "Detroit", "Warren", "Ann Arbour", "Gross Point", "East Point", "New York", 
-				"San Francisco", "Tokyo", "Taipei", "San Juan", "Heaven", "Tempe", "Tampa", "Denver", "Los Angeles" };
+				"San Francisco", "Tokyo", "Taipei", "San Juan", "Heaven", "Tempe", "Tampa", "Denver", "Los Angeles", 
+				"Cool guy Mountain", "Monkey Mt.", "Paris", "Flint"};
 		input(studentNames, favFood, hometown);
 	}
 	
 	public static void input(String[] studentNames, String[] favFood, String[] hometown) {
 		Scanner sc = new Scanner(System.in);
-		System.out.println("What student would you like to learn about? Here are their names:");
+		int index = -1;
+		String name = "";
+		System.out.println("What student would you like to learn about? Here are their names. "
+				+ "You can access the student by number or name:");
 		printStudentNames(studentNames);
-		String name = sc.nextLine();
-		int index = getIndex(studentNames, name);
-		printStudentsInfo(name, index, favFood, hometown);
+		try 
+		{
+			if (sc.hasNextInt()) {
+			index = sc.nextInt() - 1;
+			name = studentNames[index];
+		    } else if (sc.hasNextLine()) {
+			name = sc.nextLine();
+			index = getIndex(studentNames, name);
+			}
+		printStudentsInfo(name, index, favFood, hometown, studentNames); 
+		} catch (IndexOutOfBoundsException ex) {
+			System.out.println("Looks like you didn't enter a whole number in the range of 1-20. Try again");
+			input(studentNames, favFood, hometown);
+		} catch(IllegalArgumentException ex) {
+			System.out.println("Try again");
+			input(studentNames, favFood, hometown);
+		} 
 	}
 
 	public static void printStudentNames(String[] studentNames) {
@@ -48,9 +66,23 @@ public class RecognizeInvalidInputs {
 		return index;
 	}
 	
-	private static void printStudentsInfo(String name, int index, String[] favFood, String[] hometown) {
-		System.out.println(name + "'s favorite food is " + favFood[index] + " and they are from " + hometown[index] + ".");
-		
+	private static void printStudentsInfo(String name, int index, String[] favFood, String[] hometown, String[] studentNames) {
+		System.out.println(name + "'s favorite food is " + favFood[index] + " and he/she is from " + hometown[index] + ".");
+		askToKeepGoing(name, index,favFood, hometown, studentNames);
 	}
 
+	private static void askToKeepGoing(String name, int index, String[] favFood, String[] hometown, String[] studentNames) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Would you like to ask about another student?");
+		String answer = sc.nextLine();
+		if (answer.matches("^[yY]+e*s*")) {
+			input(studentNames, favFood, hometown);
+		} else if (answer.matches("[nN][oO].*")) {
+			System.out.println("See you around kid");
+		}
+		else {
+			System.out.println("Huh?");
+			askToKeepGoing(name, index, favFood, hometown, studentNames);
+		}
+	}
 }
